@@ -14,10 +14,13 @@ class NewsFeedViewController: UIViewController {
     @IBOutlet weak var feedImageView: UIImageView!
     
     var selectedImageView: UIImageView!
+    var fadeTransition: FadeTransition!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        fadeTransition = FadeTransition()
+        
         // Configure the content size of the scroll view
         scrollView.contentSize = CGSizeMake(320, feedImageView.image!.size.height)
     }
@@ -47,6 +50,16 @@ class NewsFeedViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         let destinationViewController = segue.destinationViewController as! PhotoViewController
         
+        destinationViewController.modalPresentationStyle = UIModalPresentationStyle.Custom
+        
+        // Tell the destinationViewController's  transitioning delegate to look in fadeTransition for transition instructions.
+        destinationViewController.transitioningDelegate = fadeTransition
+        
+        // Adjust the transition duration. (seconds)
+        fadeTransition.duration = 0.3
+        
+        // Set image of the incoming view controller
         destinationViewController.image = selectedImageView.image
+//        destinationViewController.imageView.contentMode = selectedImageView.contentMode
     }
 }

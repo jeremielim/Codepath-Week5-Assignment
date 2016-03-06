@@ -17,7 +17,15 @@ class PhotoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = UIColor.clearColor()
         imageView.image = image
+        
+        if image.size.width == 320 {
+            imageView.contentMode = .ScaleAspectFill
+        } else {
+            imageView.contentMode = .ScaleAspectFit
+        }
+        
 
         // Do any additional setup after loading the view.
     }
