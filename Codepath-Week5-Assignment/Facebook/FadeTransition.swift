@@ -115,6 +115,8 @@ class FadeTransition: BaseTransition {
         
         fromViewController.view.alpha = 1
         
+        // Check if use has dragged image
+        
         if photoViewController.offsetScroll == nil {
             print("nil")
             self.darkView.alpha = 1

@@ -80,8 +80,10 @@ class PhotoViewController: UIViewController, UIScrollViewDelegate {
         view.backgroundColor = UIColor(white: 0, alpha: 1)
         doneButton.alpha = 1
         photoActions.alpha = 1
-        
-        
+    }
+    
+    func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView {
+        return imageView
     }
 
     
