@@ -51,7 +51,6 @@ class FadeTransition: BaseTransition {
         // Hide dark view
         darkView.alpha = 0
         
-        feedViewController.selectedImageView.alpha = 0
         
         UIView.animateWithDuration(duration, animations: {
             // Change width and height of zoomed in image
@@ -64,6 +63,9 @@ class FadeTransition: BaseTransition {
         }) { (finished: Bool) -> Void in
             //
             photoViewController.view.backgroundColor = UIColor.blackColor()
+            
+            // Show feed image
+            feedViewController.selectedImageView.alpha = 1
             
             // Remove dark view
             self.darkView.removeFromSuperview()
@@ -81,8 +83,11 @@ class FadeTransition: BaseTransition {
         
         let photoViewController = fromViewController as! PhotoViewController
         let feedViewController = toViewController as! NewsFeedViewController
+        let scrollImageIndex = Int(photoViewController.scrollView.contentOffset.x / 320)
         
         fromViewController.view.alpha = 1
+        
+        feedViewController.imageArray[scrollImageIndex].alpha = 0
         
         // Clear photo background
         photoViewController.view.backgroundColor = UIColor.clearColor()
@@ -93,10 +98,9 @@ class FadeTransition: BaseTransition {
         // Create moving image view
         movingImageView = UIImageView()
         movingImageView.frame = photoViewController.imageView.frame
-        movingImageView.image = photoViewController.imageView.image
-        movingImageView.clipsToBounds = photoViewController.imageView.clipsToBounds
-        
-        
+        movingImageView.image = photoViewController.imageArray[scrollImageIndex].image
+        movingImageView.clipsToBounds = photoViewController.imageArray[photoViewController.imageTag].clipsToBounds
+    
         
         if feedViewController.selectedImageView.image?.size.width == 320 {
             movingImageView.contentMode = .ScaleAspectFill
@@ -109,7 +113,7 @@ class FadeTransition: BaseTransition {
         // Create dark overlay
         darkView = UIView()
         darkView.frame = photoViewController.view.frame
-        darkView.backgroundColor = UIColor.blueColor()
+        darkView.backgroundColor = UIColor.blackColor()
         fromViewController.view.addSubview(darkView)
         
         
@@ -132,7 +136,7 @@ class FadeTransition: BaseTransition {
             
             self.darkView.alpha = 0
             
-            self.movingImageView.frame = feedViewController.selectedImageView.frame
+            self.movingImageView.frame = feedViewController.imageArray[scrollImageIndex].frame
             self.darkView.alpha = 0
             
         }) { (finished: Bool) -> Void in
@@ -142,7 +146,7 @@ class FadeTransition: BaseTransition {
             self.movingImageView.removeFromSuperview()
             
             // Show original image
-            feedViewController.selectedImageView.alpha = 1
+            feedViewController.imageArray[scrollImageIndex].alpha = 1
             
             
             self.darkView.removeFromSuperview()

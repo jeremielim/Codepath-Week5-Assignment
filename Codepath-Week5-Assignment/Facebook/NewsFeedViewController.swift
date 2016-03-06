@@ -15,6 +15,13 @@ class NewsFeedViewController: UIViewController {
     
     var selectedImageView: UIImageView!
     var fadeTransition: FadeTransition!
+    var imageArray: [UIImageView]!
+    
+    @IBOutlet weak var imageView1: UIImageView!
+    @IBOutlet weak var imageView2: UIImageView!
+    @IBOutlet weak var imageView3: UIImageView!
+    @IBOutlet weak var imageView4: UIImageView!
+    @IBOutlet weak var imageView5: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +30,14 @@ class NewsFeedViewController: UIViewController {
         
         // Configure the content size of the scroll view
         scrollView.contentSize = CGSizeMake(320, feedImageView.image!.size.height)
+        
+        imageArray = [
+            imageView1,
+            imageView2,
+            imageView3,
+            imageView4,
+            imageView5
+        ]
     }
 
     override func didReceiveMemoryWarning() {
@@ -60,6 +75,7 @@ class NewsFeedViewController: UIViewController {
         
         // Set image of the incoming view controller
         destinationViewController.image = selectedImageView.image
-//        destinationViewController.imageView.contentMode = selectedImageView.contentMode
+        destinationViewController.imageTag = selectedImageView.tag
+
     }
 }
