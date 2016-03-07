@@ -27,6 +27,8 @@ class PhotoViewController: UIViewController, UIScrollViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = UIColor.blackColor()
+        
         imageArray = [
             imageView,
             imageView2,
@@ -37,7 +39,7 @@ class PhotoViewController: UIViewController, UIScrollViewDelegate {
         
         // Resize scroll view
         scrollView.delegate = self
-        scrollView.contentSize = CGSize(width: 1600, height: 568)
+        scrollView.contentSize = CGSize(width: 1600, height: 569)
 
         // Set the selected image on the correct view and position them for scrolling
         
@@ -64,20 +66,23 @@ class PhotoViewController: UIViewController, UIScrollViewDelegate {
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
         // This method is called as the user scrolls
-        let movingAlpha = convertValue(1, r1Min: scrollView.contentOffset.y, r1Max: 3.0, r2Min: 1, r2Max: 0)
+        
+        let movingAlpha = convertValue(1, r1Min: scrollView.contentOffset.y, r1Max: 25, r2Min: 1, r2Max: 0)
         
         // Check if content is scrolling down to fade out done and actions
-        if scrollView.contentOffset.y < 0 {
-            view.backgroundColor = UIColor(white: 0, alpha: movingAlpha/2)
+        if scrollView.contentOffset.y < -20 {
+            view.backgroundColor = UIColor(white: 0, alpha: movingAlpha)
             
-            doneButton.alpha = movingAlpha
-            photoActions.alpha = movingAlpha
+//            doneButton.alpha = movingAlpha
+//            photoActions.alpha = movingAlpha
         
+        } else if scrollView.contentOffset.x > 0 {
+            scrollView.contentOffset.y = 0
         }
     }
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        
+       
     }
     
     func scrollViewDidEndDragging(scrollView: UIScrollView,
@@ -88,25 +93,39 @@ class PhotoViewController: UIViewController, UIScrollViewDelegate {
         // Close image if scrolling over a 100
         if scrollView.contentOffset.y < -100 {
             dismissViewControllerAnimated(true, completion: nil)
-            
+
             offsetScroll = scrollView.contentOffset.y
-            
-            view.backgroundColor = UIColor.clearColor()
+        
         }
-            
         
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         // This method is called when the scrollview finally stops scrolling.
         view.backgroundColor = UIColor(white: 0, alpha: 1)
-        doneButton.alpha = 1
-        photoActions.alpha = 1
     }
     
     // Make view scrollable
     func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView {
-        return imageView
+        return imageArray[0]
+    }
+    
+    func scrollViewDidZoom(scrollView: UIScrollView) {
+        UIView.animateWithDuration(0.3) { () -> Void in
+            self.doneButton.alpha = 0
+            self.photoActions.alpha = 0
+        }
+    }
+    
+    func scrollViewDidEndZooming(scrollView: UIScrollView, withView view: UIView?, atScale scale: CGFloat) {
+        print(scrollView.zoomScale)
+        
+        if scrollView.zoomScale == 1 {
+            UIView.animateWithDuration(0.3) { () -> Void in
+                self.doneButton.alpha = 1
+                self.photoActions.alpha = 1
+            }
+        }
     }
 
     
